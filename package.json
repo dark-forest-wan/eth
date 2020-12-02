@@ -26,7 +26,9 @@
     "dotenv": "^8.2.0",
     "readline-sync": "^1.4.10",
     "scrypt": "^6.0.3",
-    "ts-node": "^8.10.2"
+    "ts-node": "^8.10.2",
+    "wanchain-truffle-sdk": "^1.0.0",
+    "web3-provider-engine": "^16.0.1"
   },
   "scripts": {
     "deploy:dev": "NODE_ENV=development ts-node src/deploy.ts",

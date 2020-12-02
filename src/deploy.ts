@@ -6,6 +6,7 @@ const readlineSync = require("readline-sync");
 import HDWalletProvider from "@truffle/hdwallet-provider";
 
 const isProd = process.env.NODE_ENV === "production";
+console.log('isProd', isProd);
 
 require("dotenv").config({
   path: isProd ? ".env.prod" : ".env.example",
@@ -17,7 +18,6 @@ enum Network {
   Development = "development",
   PersonalGanache = "personalGanache",
 }
-
 const NETWORK: Network = process.env.network as Network;
 const PROJECT_ID = process.env.project_id;
 const DEPLOYER_MNEMONIC = process.env.deployer_mnemonic;
@@ -53,10 +53,10 @@ if (DISABLE_ZK_CHECKS) {
   console.log("WARNING: ZK checks disabled.");
 }
 
-let network_url = "http://localhost:8545";
+let network_url = "https://gwan-ssl.wandevs.org:46891";
 
 if (NETWORK === Network.Ropsten) {
-  network_url = `https://ropsten.infura.io/v3/${PROJECT_ID}`;
+  network_url = `https://gwan-ssl.wandevs.org:46891`;
 } else if (NETWORK === Network.xDAI) {
   network_url = "https://dai.poa.network/";
 } else if (NETWORK === Network.PersonalGanache) {
@@ -93,6 +93,7 @@ const run = async () => {
     readlineSync.question("Press enter when you're done.");
   }
   const whitelistControllerAddress = whitelistControllerWallet.getAddress();
+  console.log('whitelistControllerAddress', whitelistControllerAddress);
   const whitelistContractAddress = await deployWhitelist(
     whitelistControllerAddress
   );
@@ -107,6 +108,7 @@ const run = async () => {
     coreControllerAddress,
     whitelistContractAddress
   );
+  console.log('coreContractAddress', coreContractAddress);
   fs.writeFileSync(
     isProd
       ? "../client/src/utils/prod_contract_addr.ts"
@@ -131,13 +133,18 @@ const run = async () => {
 const deployWhitelist = async (
   whitelistControllerAddress: string
 ): Promise<string> => {
+  console.log('NETWORK', NETWORK);
   await exec(`oz add Whitelist`);
   await exec(`oz push -n ${NETWORK} --no-interactive --reset --force`);
-  const whitelistAddress = await exec(
+  let whitelistAddress = await exec(
     `oz deploy Whitelist -k regular -n ${NETWORK} --no-interactive`
   );
+  whitelistAddress = whitelistAddress.slice(-42);
+  console.log('whitelistAddress', whitelistAddress);
+  console.log('debug', NETWORK, whitelistAddress, whitelistControllerAddress, isProd);
+
   await exec(
-    `oz send-tx -n ${NETWORK} --to ${whitelistAddress} --method initialize --args ${whitelistControllerAddress},${isProd} --no-interactive`
+    `oz send-tx -n ${NETWORK} --to ${whitelistAddress} --method initialize --args ${whitelistControllerAddress},${false} --no-interactive`
   );
   await exec(
     `oz send-tx -n ${NETWORK} --to ${whitelistAddress} --method receiveEther --value 2000000000000000000 --no-interactive`
