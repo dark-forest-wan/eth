@@ -1,5 +1,11 @@
 # Dark Forest Smart Contracts
 
+## Deployed in wanchain mainnet
+
+✓ Deployed instance of DarkForestCore
+
+0xdF8b696d6A4cEbe3Ae65699ae78cd1dBdbb1C52e
+
 ## Development Guide
 
 ### Installing Core Dependencies
