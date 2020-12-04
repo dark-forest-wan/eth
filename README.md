@@ -6,6 +6,10 @@
 
 0xdF8b696d6A4cEbe3Ae65699ae78cd1dBdbb1C52e
 
+✓ Deployed instance of DarkForestNFT
+
+0x8479A6E121AFAB0Ea77cbC5e78B7dF841906009d
+
 ## Development Guide
 
 ### Installing Core Dependencies
