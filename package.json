@@ -19,6 +19,8 @@
     "prettier-plugin-solidity": "^1.0.0-alpha.54",
     "solhint": "^3.0.0",
     "typescript": "^3.9.7",
+    "wanchain-truffle-sdk": "^1.0.0",
+    "web3-provider-engine": "^16.0.1",
     "why-is-node-running": "^2.2.0"
   },
   "dependencies": {

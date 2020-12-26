@@ -651,11 +651,11 @@ contract DarkForestCore is Initializable, DarkForestStorageV1 {
             "Only owner can transfer planet"
         );
 
-        require(_player != msg.sender, "Cannot transfer planet to self");
+        require(_player != msg.sender, "Cannot self");
 
         require(
             isPlayerInitialized[_player],
-            "Can only transfer ownership to initialized players"
+            "not initialized"
         );
 
         planets[_location].owner = _player;
@@ -666,19 +666,19 @@ contract DarkForestCore is Initializable, DarkForestStorageV1 {
     function buyHat(uint256 _location) public payable {
         require(
             planetsExtendedInfo[_location].isInitialized == true,
-            "Planet is not initialized"
+            "not initialized"
         );
 
         refreshPlanet(_location);
 
         require(
             planets[_location].owner == msg.sender,
-            "Only owner can buy hat for planet"
+            "Only owner"
         );
 
         uint256 cost = (1 << planetsExtendedInfo[_location].hatLevel) * 1 ether;
 
-        require(msg.value >= cost, "Insufficient value sent");
+        require(msg.value >= cost, "Insufficient");
 
         planetsExtendedInfo[_location].hatLevel += 1;
         emit BoughtHat(_location);
@@ -709,26 +709,26 @@ contract DarkForestCore is Initializable, DarkForestStorageV1 {
         if (!DISABLE_ZK_CHECK) {
             require(
                 Verifier.verifyBiomebaseProof(_a, _b, _c, _input),
-                "biome zkSNARK failed doesn't check out"
+                "biome zkSNARK failed"
             );
         }
 
         require(
             DarkForestUtils._isPlanetMineable(planetId, planet.planetLevel),
-            "you can't find an artifact on this planet"
+            "can not"
         );
-        require(!info.hasTriedFindingArtifact, "planet already plundered");
+        require(!info.hasTriedFindingArtifact, "plundered");
         require(
             planet.owner == msg.sender,
             "you can only find artifacts on planets you own"
         );
         require(
             (planet.population * 100) / planet.populationCap > 95,
-            "you must have 95% of the max energy"
+            "must 95% energy"
         );
         require(
             planet.planetResource == DarkForestTypes.PlanetResource.NONE,
-            "can't mint artifact on silver mine"
+            "silver mine"
         );
 
         info.hasTriedFindingArtifact = true;
@@ -782,19 +782,19 @@ contract DarkForestCore is Initializable, DarkForestStorageV1 {
 
         require(
             tokens.ownerOf(artifactId) == msg.sender,
-            "you can only deposit artifacts you own"
+            "not yours 1"
         );
         require(
             planet.owner == msg.sender,
-            "you can only deposit on a planet you own"
+            "not yours 2"
         );
         require(
             planetInfo.heldArtifactId == 0,
-            "planet already has an artifact"
+            "already has"
         );
         require(
             planet.planetResource == DarkForestTypes.PlanetResource.NONE,
-            "can't deposit artifact on silver mine"
+            "silver mine"
         );
 
         DarkForestPlanet._putArtifactOnPlanet(
@@ -821,14 +821,14 @@ contract DarkForestCore is Initializable, DarkForestStorageV1 {
 
         require(
             planet.owner == msg.sender,
-            "you can only withdraw from a planet you own"
+            "Not yours"
         );
-        require(artifactId != 0, "planet has no artifact to withdraw");
+        require(artifactId != 0, "No artifact");
         require(
             block.timestamp >
                 planetInfo.artifactLockedTimestamp +
                     ARTIFACT_LOCKUP_DURATION_SECONDS,
-            "planet's artifact is in lockup period"
+            "lockup"
         );
 
         DarkForestPlanet._takeArtifactOffPlanet(
